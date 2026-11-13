@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Manage users · IssueTwin{% endblock %}
+{% block content %}
+<h2 class="fw-bold">Manage workspace users</h2>
+<p class="text-secondary">Only promote trusted people to administrator.</p>
+<div class="card border-0 shadow-sm"><div class="table-responsive"><table class="table align-middle mb-0">
+<thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Change role</th></tr></thead><tbody>
+{% for user in users %}<tr><td>{{ user.name }}</td><td>{{ user.email }}</td><td>{{ user.role }}</td><td>
+<form method="post" class="d-flex gap-2"><input type="hidden" name="user_id" value="{{ user.id }}">
+<select name="role" class="form-select form-select-sm"><option value="reporter" {% if user.role=='reporter' %}selected{% endif %}>Reporter</option><option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option></select>
+<button class="btn btn-sm btn-outline-primary">Save</button></form></td></tr>{% endfor %}
+</tbody></table></div></div>
+{% endblock %}

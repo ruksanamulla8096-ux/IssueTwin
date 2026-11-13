@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Create workspace · IssueTwin{% endblock %}
+{% block content %}
+<div class="auth-card mx-auto">
+  <h2 class="fw-bold">Create your account</h2>
+  <p class="text-secondary">Use the same organization name and sector to join an existing workspace.</p>
+  <form method="post">
+    <label class="form-label">Your name</label><input class="form-control mb-3" name="name" required>
+    <label class="form-label">Email</label><input class="form-control mb-3" type="email" name="email" required>
+    <label class="form-label">Password (minimum 8 characters)</label><input class="form-control mb-3" type="password" name="password" minlength="8" required>
+    <label class="form-label">Organization / institution name</label><input class="form-control mb-3" name="organization" placeholder="Example: ABC College" required>
+    <label class="form-label">Sector</label>
+    <select class="form-select mb-3" name="sector" required>
+      <option value="">Choose your sector</option>
+      {% for sector in sectors %}<option>{{ sector }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-primary w-100">Create account</button>
+  </form>
+</div>
+{% endblock %}

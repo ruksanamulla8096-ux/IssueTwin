@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Report an issue · IssueTwin{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-8">
+  <a class="small text-decoration-none" href="{{ url_for('dashboard') }}">← Back to dashboard</a>
+  <h2 class="fw-bold mt-2">Report a problem</h2>
+  <p class="text-secondary">IssueTwin will compare your report with active issues in the same organization and site.</p>
+  <div class="card border-0 shadow-sm"><div class="card-body p-4">
+    <form method="post">
+      <label class="form-label">Short title</label><input class="form-control mb-3" name="title" maxlength="120" placeholder="Example: Drinking water cooler is not working" required>
+      <label class="form-label">Describe the problem</label><textarea class="form-control mb-3" name="description" rows="4" placeholder="Explain what happened, when it started and who is affected." required></textarea>
+      <div class="row">
+        <div class="col-md-6"><label class="form-label">Category</label><select class="form-select mb-3" name="category">{% for c in categories %}<option>{{ c }}</option>{% endfor %}</select></div>
+        <div class="col-md-6"><label class="form-label">Severity</label><select class="form-select mb-3" name="severity">{% for s in severities %}<option {% if s=='Medium' %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+      </div>
+      <label class="form-label">Site / building / branch / facility</label><input class="form-control mb-3" name="site" placeholder="Example: Main Campus - Block A" required>
+      <label class="form-label">Exact location</label><input class="form-control mb-3" name="location" placeholder="Example: First floor, near Room 105" required>
+      <label class="form-label">Suggested department (optional)</label><input class="form-control mb-4" name="department" placeholder="Example: Facilities / IT / Electrical maintenance">
+      <button class="btn btn-primary btn-lg w-100">Submit and check for duplicates</button>
+    </form>
+  </div></div>
+</div></div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · IssueTwin{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+  <div><span class="eyebrow">OVERVIEW</span><h2 class="fw-bold mb-1">Issue dashboard</h2>
+    <p class="text-secondary mb-0">{{ current_user.organization_name }} · {{ current_user.sector }}</p></div>
+  <a class="btn btn-primary" href="{{ url_for('new_complaint') }}">＋ Report an issue</a>
+</div>
+<div class="row g-3 mb-4">
+  {% for label,value,cls in [
+    ('Unique issues',stats.total,'blue'),('Open / active',stats.open,'orange'),
+    ('Resolved',stats.resolved,'green'),('Critical priority',stats.critical,'red'),
+    ('Total reports',stats.reports,'purple')
+  ] %}
+  <div class="col-6 col-lg">
+    <div class="stat-card {{ cls }}"><div class="stat-label">{{ label }}</div><div class="stat-number">{{ value }}</div></div>
+  </div>
+  {% endfor %}
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+    <div><h5 class="mb-0">Issues requiring attention</h5><small class="text-secondary">Similar reports are grouped under one issue ID.</small></div>
+    {% if session.get('role') == 'admin' %}<a class="btn btn-sm btn-outline-secondary" href="{{ url_for('export_csv') }}">Download CSV</a>{% endif %}
+  </div>
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th>Issue</th><th>Category / site</th><th>Reports</th><th>Priority</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+      {% for issue in issues %}
+        <tr>
+          <td><strong>ISSUE-{{ "%04d"|format(issue.id) }}</strong><div class="small text-secondary">{{ issue.title }}</div>
+            {% if issue.recurring %}<span class="badge text-bg-warning">Recurring</span>{% endif %}</td>
+          <td>{{ issue.category }}<div class="small text-secondary">{{ issue.site }} · {{ issue.location }}</div></td>
+          <td><strong>{{ issue.report_count }}</strong><div class="small text-secondary">{{ issue.confirmations }} confirmations</div></td>
+          <td><span class="badge priority-{{ issue.priority|lower }}">{{ issue.priority }}</span></td>
+          <td><span class="badge status-{{ issue.status|lower|replace(' ','-') }}">{{ issue.status }}</span></td>
+          <td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('issue_detail', issue_id=issue.id) }}">View</a></td>
+        </tr>
+      {% else %}
+        <tr><td colspan="6" class="text-center py-5 text-secondary">No issues yet. Submit the first report to get started.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
